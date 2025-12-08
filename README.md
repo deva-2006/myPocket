@@ -1,4 +1,6 @@
 # **myPocket v1.01**  
+
+**I actually searched for so many budget planning websites everyone of them had a subscription based service so that I made myself**
 A clean, simple Smart Budget App that tracks your income, expenses, savings, and financial health score — directly in your browser.
 
 ---
