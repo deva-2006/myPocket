@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Smart Budget App</title>
+
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div class="app" id="app"> <!-- its a grid -->
+
+    <!-- HEADER -->
+    <div>
+        <h1>Smart Budget Starter</h1>
+        <div class="muted">Add income & expenses → Get score & advice.</div>
+
+        <!-- INCOME SECTION -->
+        <div class="card section">
+            <label>Total Monthly Income (₹)</label>
+
+            <div class="row">
+                <input id="income" type="number" placeholder="e.g., 30000" />
+
+                <button class="btn" id="saveIncome">Save</button>
+                <button class="btn ghost" id="clearAll">Clear</button>
+            </div>
+        </div>
+
+        <!-- EXPENSE SECTION -->
+        <div class="card section">
+            <label>Add Expense</label>
+
+            <div class="row">
+                <input id="expenseAmt" type="number" placeholder="Amount (₹)" />
+                <input id="expenseCat" type="text" placeholder="Category (OTT, Food, Wi-Fi)" />
+            </div>
+
+            <!-- Preset buttons -->
+            <div class="row preset-row">
+                <div class="preset" data-val="100">₹100</div>
+                <div class="preset" data-val="500">₹500</div>
+                <div class="preset" data-val="1000">₹1K</div>
+                <div class="preset" data-val="2000">₹2K</div>
+                <div class="preset" data-val="5000">₹5K</div>
+                <div class="preset" data-val="10000">₹10K</div>
+            </div>
+
+            <div class="row">
+                <button class="btn" id="addExpense">Add Expense</button>
+                <button class="btn ghost" id="undo">Undo</button>
+            </div>
+
+            <div id="list" class="list card"></div>
+        </div>
+
+        <!-- TOTALS -->
+        <div class="card section totals">
+            <div>
+                <div class="muted">Total Income</div>
+                <div class="big" id="showIncome">₹0</div>
+            </div>
+
+            <div>
+                <div class="muted">Total Expenses</div>
+                <div class="big" id="showExpenses">₹0</div>
+            </div>
+
+            <div>
+                <div class="muted">Savings</div>
+                <div class="big" id="showSavings">₹0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <aside class="rightcol">
+
+        <div class="card">
+            <div class="muted">Financial Health Score</div>
+
+            <div class="score">
+                <div class="big" id="scoreVal">0</div>
+
+                <div class="score-meter">
+                    <div class="meter"><div id="meterFill"></div></div>
+                    <div class="muted score-label" id="scoreMsg">—</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card hint">
+            <strong>Recommendations</strong>
+            <ul id="recoList"></ul>
+        </div>
+    </aside>
+
+</div>
+
+<!-- Link JS -->
+<script src="app.js"></script>
+</body>
+</html>
