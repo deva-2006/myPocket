@@ -1,59 +1,111 @@
-# **myPocket v1.01**  
-
-**I actually searched for so many budget planning websites everyone of them had a subscription based service so that I made myself**
-A clean, simple Smart Budget App that tracks your income, expenses, savings, and financial health score — directly in your browser.
 
 ---
 
-## 🚀 Features
-- Add and update monthly income  
-- Add expenses with category + timestamp  
-- Quick preset buttons (₹100, ₹500, ₹1K, etc.)  
-- Auto-calculations:
-  - Total expenses  
-  - Savings  
-  - Financial Health Score (0–100)  
-- Smart recommendations based on spending  
-- Undo & delete functions  
-- Data saved in **localStorage**  
-- Simple, responsive UI  
+# **myPocket — Smart Budget App**
+
+A simple personal finance assistant that I built because most finance tools online are either paid, overcomplicated, or locked behind premium plans.
+I just wanted something clean: **add income, add expenses, see savings, and get a clear financial score.**
+So I built it myself — and used it as a way to learn backend through real tasks.
 
 ---
 
-## 🧠 Tech Used
-- **HTML**
-- **CSS**
-- **JavaScript (Vanilla JS)**
-- **localStorage API**
+## ⭐ **Why I Built This**
+
+While searching for websites that show spending insights or calculate FIRE numbers, almost everything useful was premium.
+Also, I wanted a real project to learn backend using **task-based learning**, not theory.
+
+So I made my own tool:
+
+* A clean UI I can use daily
+* A project that helps me learn Spring Boot later
+* No premium restrictions, no ads, just practical features
 
 ---
 
-## 📌 How It Works
-1. Enter your income  
-2. Add expenses manually or using quick presets  
-3. The app displays:
-   - Total Income  
-   - Total Expenses  
-   - Savings  
-   - A financial score  
-   - Personalized recommendations  
+## 🚀 **Features**
+
+* Add monthly income (slider UI)
+* Add expenses with category & timestamp
+* Smart preset buttons (₹100, ₹500, ₹1K…)
+* Auto-calculates:
+
+  * Total income
+  * Total expenses
+  * Savings
+* **Financial Health Score (0–100)**
+* Live recommendations to improve spending
+* Dark mode / Light mode toggle
+* Undo & delete expense
+* LocalStorage saving
+* Fully responsive clean UI
 
 ---
 
-## 🎯 Roadmap (Upcoming Versions)
-- Backend with **Spring Boot**  
-- User accounts + authentication  
-- MySQL database  
-- Monthly analytics dashboard  
-- ML-based spending predictions  
-- Export/Import data  
-- Mobile UI improvements  
+## 🧱 **Tech Stack**
+
+### **Frontend**
+
+* HTML
+* CSS
+* JavaScript (Vanilla DOM)
+
+### **Backend (Coming Soon)**
+
+* Spring Boot
+* MySQL
+* REST APIs for:
+
+  * Saving income/expense data
+  * Monthly analytics
+  * FIRE number calculation
+  * User accounts
 
 ---
 
-## 📦 Installation
-Clone and open `index.html`:
+## 🏗️ **How the Project Helped Me Learn**
 
-```sh
-git clone https://github.com/deva-2006/myPocket
-cd myPocket
+I used this project to learn JavaScript and will use it again to learn Spring Boot.
+Every feature (income slider, scoring, saving to storage, theme toggle) became a small **task-based learning** step — which works way better for me than learning theory first.
+
+---
+
+## 📌 **Project Structure**
+
+```
+myPocket/
+│── index.html
+│── style.css
+│── app.js
+└── assets/ (optional)
+```
+
+---
+
+## 📈 **Next Updates**
+
+* Backend integration (Spring Boot + MySQL)
+* Monthly graph view
+* Export/Import user data
+* In-app notifications (no more alert boxes)
+* Better FIRE number insights
+
+---
+
+## 🤝 **Contributions**
+
+This is a personal learning project, but suggestions are welcome.
+
+---
+
+## 📄 **License**
+
+MIT License (optional — add if needed)
+
+---
+
+If you want, I can also make:
+✔ A **shorter** README
+✔ A **more stylish** README with badges, emojis, screenshots
+✔ A **more professional** README for placements
+
+Just tell me what style you want.
