@@ -6,31 +6,34 @@
 
     <title>Smart Budget App</title>
 
-    <!-- Link CSS -->
     <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<div class="app" id="app"> <!-- its a grid -->
+<div class="app" id="app">
+<div>
+   <div class="header-row">
+  <h1>Smart Budget Starter</h1>
+  <button id="themeToggle" type="button" aria-pressed="false" aria-label="Toggle dark mode" class="btn ghost">
+    🌙
+  </button>
+</div>
 
-    <!-- HEADER -->
-    <div>
-        <h1>Smart Budget Starter</h1>
-        <div class="muted">Add income & expenses → Get score & advice.</div>
+<div class="muted">Add income & expenses → Get score & advice.</div>
 
-        <!-- INCOME SECTION -->
         <div class="card section">
-            <label>Total Monthly Income (₹)</label>
+           <label for="incomeRange">Total Monthly Income (₹)</label>
+           <div class="row" style="align-items:center;">
+            <input id="incomeRange" type="range" min="0" max="300000" step="500" value="0" aria-label="Income slider" />
+            <div id="incomePreview" class="big" style="min-width:110px; text-align:right;">₹0</div>
+           </div>
+<div class="row" style="margin-top:8px;">
+  <button type="button" class="btn" id="saveIncome">Save</button>
+  <button type="button" class="btn ghost" id="clearAll">Clear</button>
+</div>
 
-            <div class="row">
-                <input id="income" type="number" placeholder="e.g., 30000" />
-
-                <button class="btn" id="saveIncome">Save</button>
-                <button class="btn ghost" id="clearAll">Clear</button>
-            </div>
         </div>
 
-        <!-- EXPENSE SECTION -->
         <div class="card section">
             <label>Add Expense</label>
 
@@ -39,25 +42,26 @@
                 <input id="expenseCat" type="text" placeholder="Category (OTT, Food, Wi-Fi)" />
             </div>
 
-            <!-- Preset buttons -->
-            <div class="row preset-row">
-                <div class="preset" data-val="100">₹100</div>
-                <div class="preset" data-val="500">₹500</div>
-                <div class="preset" data-val="1000">₹1K</div>
-                <div class="preset" data-val="2000">₹2K</div>
-                <div class="preset" data-val="5000">₹5K</div>
-                <div class="preset" data-val="10000">₹10K</div>
-            </div>
+<div class="row preset-row" role="group" aria-label="Quick expense presets">
+  <button type="button" class="preset" data-val="100" aria-label="Add 100 rupees">₹100</button>
+  <button type="button" class="preset" data-val="500" aria-label="Add 500 rupees">₹500</button>
+  <button type="button" class="preset" data-val="1000" aria-label="Add 1 thousand rupees">₹1K</button>
+  <button type="button" class="preset" data-val="2000" aria-label="Add 2 thousand rupees">₹2K</button>
+  <button type="button" class="preset" data-val="5000" aria-label="Add 5 thousand rupees">₹5K</button>
+  <button type="button" class="preset" data-val="10000" aria-label="Add 10 thousand rupees">₹10K</button>
+</div>
 
             <div class="row">
                 <button class="btn" id="addExpense">Add Expense</button>
                 <button class="btn ghost" id="undo">Undo</button>
             </div>
 
-            <div id="list" class="list card"></div>
+            <div id="list" class="list card">
+  <div id="emptyState" class="empty-state">No expenses yet — add one to get started.</div>
+</div>
+
         </div>
 
-        <!-- TOTALS -->
         <div class="card section totals">
             <div>
                 <div class="muted">Total Income</div>
@@ -76,7 +80,6 @@
         </div>
     </div>
 
-    <!-- RIGHT PANEL -->
     <aside class="rightcol">
 
         <div class="card">
@@ -100,7 +103,6 @@
 
 </div>
 
-<!-- Link JS -->
 <script src="app.js"></script>
 </body>
 </html>

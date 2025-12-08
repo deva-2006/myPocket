@@ -1,252 +1,256 @@
-/* ---------------------------------------------------
-   SHORTCUT: $ = document.getElementById()
---------------------------------------------------- */
 const $ = id => document.getElementById(id);
 
-/* ---------------------------------------------------
-   APP STATE (income + expenses)
-   Loaded from localStorage when page opens
---------------------------------------------------- */
 let state = {
-    income: Number(localStorage.getItem('sb_income') || 0),
-
-    // If nothing exists → empty array
-    expenses: JSON.parse(localStorage.getItem('sb_exp') || '[]') //here we convert json formatted string into js object  , but [] represents an array
+  income: Number(localStorage.getItem('sb_income') || 0),
+  expenses: JSON.parse(localStorage.getItem('sb_exp') || '[]')
 };
 
-/* ---------------------------------------------------
-   Save state to browser storage
---------------------------------------------------- */
 function saveState() {
-    localStorage.setItem('sb_income', state.income); // key and value
-    localStorage.setItem('sb_exp', JSON.stringify(state.expenses));  //json is saved as a string
+  localStorage.setItem('sb_income', state.income);
+  localStorage.setItem('sb_exp', JSON.stringify(state.expenses));
 }
 
-/* ---------------------------------------------------
-   Format ₹ amount nicely
---------------------------------------------------- */
 function format(x) {
-    return "₹" + Number(x || 0).toLocaleString();  //converts 1000 to ₹1,000
+  return "₹" + Number(x || 0).toLocaleString();
 }
 
-/* ---------------------------------------------------
-   RENDER FUNCTION
-   Updates UI based on "state"
---------------------------------------------------- */
-function render() {
+function applyTheme(theme) {
+  if (theme === 'dark') document.body.classList.add('dark');
+  else document.body.classList.remove('dark');
 
-    // Show saved income in input box
-   $('income').value = state.income > 0 ? state.income : "";
+  const btn = $('themeToggle');
+  if (btn) {
+    const pressed = theme === 'dark';
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    btn.textContent = pressed ? '☀️' : '🌙';
+  }
+}
 
+(function initTheme() {
+  const savedTheme = localStorage.getItem('sb_theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
 
-
-    // Calculate totals
-    const totalExp = state.expenses.reduce((sum, e) => sum + e.amount, 0);
-    const savings = Math.max(0, state.income - totalExp);
-
-    // Update totals on UI
-    $('showIncome').textContent = format(state.income);
-    $('showExpenses').textContent = format(totalExp);
-    $('showSavings').textContent = format(savings);
-
-    /* ------------------------------------------
-       RENDER EXPENSE LIST
-    ------------------------------------------ */
-    const list = $('list');
-    list.innerHTML = ""; // clear old items
-
-    state.expenses.slice().reverse().forEach(
- 
-            // e is an element fro;m state.expenses and idx is a index for iteration
-
-        (e, idx) => {
-
-        const div = document.createElement('div'); // <div> </div>
-        div.className = "item"; // <div class="item"> </div>
-
-        div.innerHTML = 
-        //template literal
-        `
-            <div>
-                <strong>${e.cat}</strong><br>
-                <span class="muted">${new Date(e.t).toLocaleString()}</span>
-            </div>
-
-            <div style="text-align:right;">
-                <strong>${format(e.amount)}</strong><br><br>
-               
-            </div>
-        `;
-  // creating button in js not in innerHTML
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.dataset.idx = state.expenses.length - 1 - idx; //logic for reverse indexing
-         div.children[1].appendChild(deleteBtn); //adding the button to the second div
-        deleteBtn.addEventListener("click", () => {
-    removeExpense(deleteBtn);
-   
-
-});
-        list.appendChild(div);
-    }
-);
-
-    /* ------------------------------------------
-       SCORE + MESSAGE
-    ------------------------------------------ */
-    const score = computeScore(state.income, totalExp, state.expenses);
-
-    $('scoreVal').textContent = score;
-    $('meterFill').style.width = score + "%";
-
-    $('scoreMsg').textContent =
-        score >= 75 ? "Great — keep going" :
-        score >= 50 ? "Okay — try improving" :
-        "Poor — fix spending";
-
-    /* ------------------------------------------
-       RECOMMENDATIONS
-    ------------------------------------------ */
-    const recos = generateRecs(state.income, totalExp, state.expenses);
-
-    const ul = $('recoList');
-    ul.innerHTML = "";
-
-    recos.forEach(r => {
-        const li = document.createElement('li');
-        li.textContent = r;
-        ul.appendChild(li);
+  const themeToggle = $('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isNowDark = document.body.classList.toggle('dark');
+      localStorage.setItem('sb_theme', isNowDark ? 'dark' : 'light');
+      themeToggle.setAttribute('aria-pressed', isNowDark ? 'true' : 'false');
+      themeToggle.textContent = isNowDark ? '☀️' : '🌙';
     });
+  }
+})();
+
+function render() {
+  const range = $('incomeRange');
+  if (range) {
+    range.value = state.income || 0;
+    const preview = $('incomePreview');
+    if (preview) preview.textContent = format(state.income);
+  }
+
+  const totalExp = state.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+  const savings = Math.max(0, state.income - totalExp);
+
+  $('showIncome').textContent = format(state.income);
+  $('showExpenses').textContent = format(totalExp);
+  $('showSavings').textContent = format(savings);
+
+  const list = $('list');
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  state.expenses.slice().reverse().forEach((e, idx) => {
+    const origIdx = state.expenses.length - 1 - idx;
+
+    const item = document.createElement('div');
+    item.className = 'item';
+
+    const left = document.createElement('div');
+    const title = document.createElement('strong');
+    title.textContent = e.cat || 'Miscellaneous';
+    const time = document.createElement('div');
+    time.className = 'muted small';
+    time.textContent = new Date(e.t).toLocaleString();
+
+    left.appendChild(title);
+    left.appendChild(document.createElement('br'));
+    left.appendChild(time);
+
+    const right = document.createElement('div');
+    right.style.textAlign = 'right';
+
+    const amt = document.createElement('strong');
+    amt.textContent = format(e.amount);
+
+    const actions = document.createElement('div');
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'btn btn-danger';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.dataset.idx = origIdx;
+
+    deleteBtn.addEventListener('click', () => {
+      removeExpense(deleteBtn);
+    });
+
+    actions.appendChild(deleteBtn);
+
+    right.appendChild(amt);
+    right.appendChild(document.createElement('br'));
+    right.appendChild(actions);
+
+    item.appendChild(left);
+    item.appendChild(right);
+
+    list.appendChild(item);
+  });
+
+  const score = computeScore(state.income, totalExp, state.expenses);
+  $('scoreVal').textContent = score;
+  $('meterFill').style.width = score + "%";
+
+  $('scoreMsg').textContent =
+    score >= 75 ? "Great — keep going" :
+    score >= 50 ? "Okay — try improving" :
+    "Poor — fix spending";
+
+  const recos = generateRecs(state.income, totalExp, state.expenses);
+  const ul = $('recoList');
+  if (ul) {
+    ul.innerHTML = "";
+    recos.forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = r;
+      ul.appendChild(li);
+    });
+  }
 }
 
-/* ---------------------------------------------------
-   ADD EXPENSE
---------------------------------------------------- */
-$('addExpense').addEventListener('click', () => {
-
+const addExpenseBtn = $('addExpense');
+if (addExpenseBtn) {
+  addExpenseBtn.addEventListener('click', () => {
     const amt = Number($('expenseAmt').value);
-    const cat = $('expenseCat').value || "Miscellaneous ";
+    const cat = ($('expenseCat').value || "Miscellaneous").trim();
 
     if (!amt || amt <= 0) return alert("Enter valid amount");
 
-    state.expenses.push({  // here we are saving the expense object
-        amount: amt,
-        cat: cat.trim(),
-        t: Date.now()
-    });
-
+    state.expenses.push({ amount: amt, cat, t: Date.now() });
     saveState();
     render();
 
-    // Clear input boxes
     $('expenseAmt').value = "";
     $('expenseCat').value = "";
-});
+  });
+}
 
-/* ---------------------------------------------------
-   PRESET BUTTONS (100, 500, 1K, etc.)
---------------------------------------------------- */
 document.querySelectorAll('.preset').forEach(btn => {
-    btn.addEventListener('click', () => {
-        $('expenseAmt').value = btn.dataset.val;
-    });
+  btn.addEventListener('click', () => {
+    $('expenseAmt').value = btn.dataset.val;
+  });
 });
 
-/* ---------------------------------------------------
-   SAVE INCOME
---------------------------------------------------- */
-$('saveIncome').addEventListener('click', () => {
-    const inc = Number($('income').value);
+const incomeRangeEl = $('incomeRange');
+if (incomeRangeEl) {
+  incomeRangeEl.addEventListener('input', () => {
+    const v = Number(incomeRangeEl.value || 0);
+    const preview = $('incomePreview');
+    if (preview) preview.textContent = format(v);
+  });
+}
+
+const saveIncomeBtn = $('saveIncome');
+if (saveIncomeBtn) {
+  saveIncomeBtn.addEventListener('click', () => {
+    const rangeEl = $('incomeRange');
+    const inc = rangeEl ? Number(rangeEl.value) : Number($('income')?.value);
 
     if (!inc || inc <= 0) return alert("Enter valid income");
 
-    state.income = inc; // here we are saving the income
+    state.income = inc;
     saveState();
     render();
-});
-
-/* ---------------------------------------------------
-   REMOVE EXPENSE
---------------------------------------------------- */
-function removeExpense(btn) {
-    const index = Number(btn.dataset.idx);
-    state.expenses.splice(index, 1);
-
-    saveState();
-    render();
+  });
 }
 
-/* ---------------------------------------------------
-   UNDO (remove last item)
---------------------------------------------------- */
-$('undo').addEventListener('click', () => {
+function removeExpense(btn) {
+  const index = Number(btn.dataset.idx);
+  if (!Number.isFinite(index)) return;
+  state.expenses.splice(index, 1);
+  saveState();
+  render();
+}
+
+const undoBtn = $('undo');
+if (undoBtn) {
+  undoBtn.addEventListener('click', () => {
     state.expenses.pop();
     saveState();
     render();
-});
- 
-/* ---------------------------------------------------
-   CLEAR ALL
---------------------------------------------------- */
-$('clearAll').addEventListener('click', () => {
-    if (!confirm("Clear everything?")) return;
+  });
+}
 
+const clearAllBtn = $('clearAll');
+if (clearAllBtn) {
+  clearAllBtn.addEventListener('click', () => {
+    if (!confirm("Clear everything?")) return;
     state.income = 0;
     state.expenses = [];
     saveState();
     render();
-});
+  });
+}
 
-/* ---------------------------------------------------
-   SCORE CALCULATION
---------------------------------------------------- */
 function computeScore(income, totalExp, expenses) {
-    if (!income) return 0;
+  if (!income) return 0;
 
-    const savings = Math.max(0, income - totalExp);
-    const savingsRate = savings / income; // the percentage of savings
+  const savings = Math.max(0, income - totalExp);
+  const savingsRate = savings / income;
 
-    
-// Identify discretionary spending
-const discretionaryCats = ["ott", "food", "shopping", "wifi", "entertainment"];
+  const discretionaryCats = ["ott", "food", "shopping", "wifi", "entertainment"];
+  const discretionaryTotal = expenses
+    .filter(e => {
+      const c = (e.cat || "").toLowerCase().replace(/[^a-z]/g, "");
+      return discretionaryCats.some(d => c.includes(d));
+    })
+    .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
-// Calculate total discretionary spending
-const discretionaryTotal = expenses
-  .filter(e => {
-    // 1. Clean category (lowercase + remove non-letters)
-    const c = (e.cat || "")
-      .toLowerCase()
-      .replace(/[^a-z]/g, ""); 
+  const discretionaryRate = discretionaryTotal / Math.max(1, income);
 
-    // 2. Check if cleaned category contains any keyword
-    return discretionaryCats.some(d => c.includes(d));
-  })
-  .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+  const savingsScore = Math.min(40, Math.round(savingsRate * 40));
+  const discPenalty = Math.min(40, Math.round(discretionaryRate * 40));
+  let score = 50 + savingsScore - discPenalty;
 
+  return Math.max(0, Math.min(100, score));
+}
 
-/* ---------------------------------------------------
-   RECOMMENDATIONS
---------------------------------------------------- */
 function generateRecs(income, totalExp, expenses) {
-    const recs = [];
-
-    if (!income) {
-        recs.push("Enter your income to get recommendations.");
-        return recs;
-    }
-
-    const savings = Math.max(0, income - totalExp);
-    const rate = savings / income;
-
-    if (rate < 0.1) recs.push("Try to save at least 10% of your income.");
-    else if (rate < 0.2) recs.push("Aim for 20% savings to improve score.");
-    else recs.push("Good savings! Consider long-term investments.");
-
+  const recs = [];
+  if (!income) {
+    recs.push("Enter your income to get recommendations.");
     return recs;
+  }
+
+  const savings = Math.max(0, income - totalExp);
+  const rate = savings / income;
+  if (rate < 0.1) recs.push("Try to save at least 10% of your income.");
+  else if (rate < 0.2) recs.push("Aim for 20% savings to improve score.");
+  else recs.push("Good savings! Consider long-term investments.");
+
+  const byCat = expenses.reduce((m, e) => {
+    const cat = (e.cat || "Misc").trim();
+    m[cat] = (m[cat] || 0) + Number(e.amount || 0);
+    return m;
+  }, {});
+  const topCat = Object.entries(byCat).sort((a,b) => b[1] - a[1])[0];
+  if (topCat && topCat[1] > 0) {
+    recs.push(`Consider cutting down on ${topCat[0]} (₹${topCat[1].toLocaleString()})`);
+  }
+
+  return recs;
 }
 
-/* ---------------------------------------------------
-   INITIAL RENDER (when page loads)
---------------------------------------------------- */
 render();
-}
