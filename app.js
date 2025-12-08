@@ -249,3 +249,4 @@ function generateRecs(income, totalExp, expenses) {
    INITIAL RENDER (when page loads)
 --------------------------------------------------- */
 render();
+}
