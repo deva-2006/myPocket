@@ -1,43 +1,90 @@
 
----
 
-# **myPocket — Smart Budget App**
+# **myPocket — Smart Budget & FIRE Calculator**
 
-A simple personal finance assistant that I built because most finance tools online are either paid, overcomplicated, or locked behind premium plans.
-I just wanted something clean: **add income, add expenses, see savings, and get a clear financial score.**
-So I built it myself — and used it as a way to learn backend through real tasks.
+myPocket is a clean, simple personal finance assistant built to track income, expenses, savings, and long-term financial independence goals.
+Most finance tools online are paid or overcomplicated — so I built my own version that is **free**, **minimal**, and **practical**, while also using it as a way to learn real development through task-based learning.
 
 ---
 
 ## ⭐ **Why I Built This**
 
-While searching for websites that show spending insights or calculate FIRE numbers, almost everything useful was premium.
-Also, I wanted a real project to learn backend using **task-based learning**, not theory.
+I wanted a finance tool that:
 
-So I made my own tool:
+* Shows income, expenses, savings clearly
+* Gives a meaningful financial score
+* Helps understand spending patterns
+* Calculates FIRE (Financial Independence, Retire Early) — without ads or premium walls
 
-* A clean UI I can use daily
-* A project that helps me learn Spring Boot later
-* No premium restrictions, no ads, just practical features
+This project also became my gateway to learning:
+
+* JavaScript deeply (DOM, events, state handling)
+* Clean UI/UX design
+* And later → Spring Boot backend
 
 ---
 
 ## 🚀 **Features**
 
-* Add monthly income (slider UI)
-* Add expenses with category & timestamp
-* Smart preset buttons (₹100, ₹500, ₹1K…)
+### 💰 **Budgeting**
+
+* Slider-based income input
+* Expense input with category
+* Quick preset buttons (₹100, ₹500, ₹1K…)
 * Auto-calculates:
 
   * Total income
   * Total expenses
   * Savings
-* **Financial Health Score (0–100)**
-* Live recommendations to improve spending
-* Dark mode / Light mode toggle
-* Undo & delete expense
-* LocalStorage saving
-* Fully responsive clean UI
+
+### 📊 **Financial Health Score**
+
+* Score from **0–100**
+* Color meter bar
+* Smart insights & recommendations
+
+### 🌓 **Theme**
+
+* Light / Dark mode
+* Saves preference in localStorage
+
+### 🗂️ **Expense Management**
+
+* Undo last expense
+* Delete individual expenses
+* Timestamp for every entry
+* Persistent storage
+
+---
+
+## 🔥 **NEW: FIRE (Financial Independence) Calculator**
+
+I added a complete FIRE Calculator that helps estimate long-term wealth goals.
+
+### ✔ Dual-Input System (Slider + Pill Input)
+
+For each FIRE field:
+
+* Monthly expenses
+* Current age
+* Retirement age
+* Life expectancy
+* Inflation
+
+Each uses a **slider** + **click-to-edit pill** that stay perfectly in sync.
+
+### ✔ FIRE Outputs
+
+* Main FIRE number
+* Annual expense today
+* Future expense at retirement (inflation-adjusted)
+* Lean FIRE (25× rule)
+* Fat FIRE (30× rule)
+* Years until retirement
+
+### ✔ Clean, integrated UI
+
+Not a separate page — fits smoothly inside the myPocket layout.
 
 ---
 
@@ -46,66 +93,67 @@ So I made my own tool:
 ### **Frontend**
 
 * HTML
-* CSS
-* JavaScript (Vanilla DOM)
+* CSS (Custom UI, light/dark themes, responsive layout)
+* JavaScript
+
+  * DOM manipulation
+  * LocalStorage state
+  * Dynamic UI rendering
+  * Custom slider + pill component
+  * Financial calculations
 
 ### **Backend (Coming Soon)**
 
 * Spring Boot
 * MySQL
-* REST APIs for:
-
-  * Saving income/expense data
-  * Monthly analytics
-  * FIRE number calculation
-  * User accounts
+* REST APIs
+* User authentication
+* Storing income/expenses/FIRE data
 
 ---
 
-## 🏗️ **How the Project Helped Me Learn**
+## 🧠 **What I Learned Building This**
 
-I used this project to learn JavaScript and will use it again to learn Spring Boot.
-Every feature (income slider, scoring, saving to storage, theme toggle) became a small **task-based learning** step — which works way better for me than learning theory first.
+* DOM-based component architecture
+* Handling UI state cleanly
+* Syncing multiple inputs
+* Designing responsive layouts
+* Structuring code for readability
+* Using LocalStorage like a mini-database
+* Breaking a large feature (FIRE) into tasks
+* Preparing the project for full backend integration later
+
+This project significantly improved my JavaScript confidence.
 
 ---
 
-## 📌 **Project Structure**
+## 📂 **Project Structure**
 
 ```
 myPocket/
 │── index.html
 │── style.css
 │── app.js
-└── assets/ (optional)
+│── README.md
+└── icon.jpg
 ```
 
 ---
 
-## 📈 **Next Updates**
+## 📈 **Upcoming Updates**
 
-* Backend integration (Spring Boot + MySQL)
-* Monthly graph view
-* Export/Import user data
-* In-app notifications (no more alert boxes)
-* Better FIRE number insights
+* Spring Boot backend for saving all data
+* User login / authentication
+* Monthly trend charts
+* Export / Import data
+* Better recommendations using analytics
+* Notification system (instead of alert boxes)
 
 ---
 
 ## 🤝 **Contributions**
 
-This is a personal learning project, but suggestions are welcome.
+This is a self-learning project, but suggestions are always welcome.
 
 ---
 
-## 📄 **License**
-
-MIT License (optional — add if needed)
-
----
-
-If you want, I can also make:
-✔ A **shorter** README
-✔ A **more stylish** README with badges, emojis, screenshots
-✔ A **more professional** README for placements
-
-Just tell me what style you want.
