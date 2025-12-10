@@ -1,108 +1,171 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Smart Budget App</title>
-
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Budget App</title>
+  <link rel="shortcut icon" href="icon.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<div class="app" id="app">
-<div>
-   <div class="header-row">
-  <h1>Smart Budget Starter</h1>
-  <button id="themeToggle" type="button" aria-pressed="false" aria-label="Toggle dark mode" class="btn ghost">
-    🌙
-  </button>
-</div>
+  <div class="app">
 
-<div class="muted">Add income & expenses → Get score & advice.</div>
+    
+    <header class="header-row">
+      <h1>Smart Budget Starter</h1>
+      <button id="themeToggle" type="button" class="btn ghost" aria-pressed="false">🌙</button>
+    </header>
 
-        <div class="card section">
-           <label for="incomeRange">Total Monthly Income (₹)</label>
-           <div class="row" style="align-items:center;">
-            <input id="incomeRange" type="range" min="0" max="300000" step="500" value="0" aria-label="Income slider" />
-            <div id="incomePreview" class="big" style="min-width:110px; text-align:right;">₹0</div>
-           </div>
-<div class="row" style="margin-top:8px;">
-  <button type="button" class="btn" id="saveIncome">Save</button>
-  <button type="button" class="btn ghost" id="clearAll">Clear</button>
-</div>
+    <p class="muted">Add income & expenses → Get score & advice.</p>
 
+    <section class="card section">
+      <label for="incomeRange">Total Monthly Income (₹)</label>
+
+      <div class="row align-center">
+        <input id="incomeRange" type="range" min="0" max="300000" step="500" />
+        <div id="incomePreview" class="big amount-preview">₹0</div>
+      </div>
+
+      <div class="row top-gap">
+        <button id="saveIncome" class="btn">Save</button>
+        <button id="clearAll" class="btn ghost">Clear</button>
+      </div>
+    </section>
+
+    <section class="card section">
+      <label>Add Expense</label>
+
+      <div class="row">
+        <input id="expenseAmt" type="number" placeholder="Amount (₹)" />
+        <input id="expenseCat" type="text" placeholder="Category (OTT, Food, Wi-Fi)" />
+      </div>
+
+      <div class="row preset-row">
+        <button class="preset" data-val="100">₹100</button>
+        <button class="preset" data-val="500">₹500</button>
+        <button class="preset" data-val="1000">₹1K</button>
+        <button class="preset" data-val="2000">₹2K</button>
+        <button class="preset" data-val="5000">₹5K</button>
+        <button class="preset" data-val="10000">₹10K</button>
+      </div>
+
+      <div class="row">
+        <button id="addExpense" class="btn">Add Expense</button>
+        <button id="undo" class="btn ghost">Undo</button>
+      </div>
+
+      <div id="list" class="list card expense-list">
+        <div id="emptyState" class="empty-state">No expenses yet — add one to get started.</div>
+      </div>
+    </section>
+
+    <section class="card section totals">
+      <div>
+        <p class="muted">Total Income</p>
+        <div id="showIncome" class="big">₹0</div>
+      </div>
+
+      <div>
+        <p class="muted">Total Expenses</p>
+        <div id="showExpenses" class="big">₹0</div>
+      </div>
+
+      <div>
+        <p class="muted">Savings</p>
+        <div id="showSavings" class="big">₹0</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="muted">Financial Health Score</p>
+
+      <div class="score">
+        <div id="scoreVal" class="big">0</div>
+
+        <div class="score-meter">
+          <div class="meter"><div id="meterFill"></div></div>
+          <p id="scoreMsg" class="muted score-label">—</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card hint">
+      <strong>Recommendations</strong>
+      <ul id="recoList"></ul>
+    </section>
+
+    <section class="card mp-fire-card" id="mp-fire-card">
+      <h3 class="card-title">F.I.R.E. Calculator</h3>
+
+      <div class="mp-fire-inputs">
+
+        <div class="mp-dual-row" data-key="monthlyExpenses">
+          <label>Monthly household expenses</label>
+          <input type="range" class="mp-range" min="1000" max="500000" step="100" />
+          <button class="mp-pill"></button>
         </div>
 
-        <div class="card section">
-            <label>Add Expense</label>
-
-            <div class="row">
-                <input id="expenseAmt" type="number" placeholder="Amount (₹)" />
-                <input id="expenseCat" type="text" placeholder="Category (OTT, Food, Wi-Fi)" />
-            </div>
-
-<div class="row preset-row" role="group" aria-label="Quick expense presets">
-  <button type="button" class="preset" data-val="100" aria-label="Add 100 rupees">₹100</button>
-  <button type="button" class="preset" data-val="500" aria-label="Add 500 rupees">₹500</button>
-  <button type="button" class="preset" data-val="1000" aria-label="Add 1 thousand rupees">₹1K</button>
-  <button type="button" class="preset" data-val="2000" aria-label="Add 2 thousand rupees">₹2K</button>
-  <button type="button" class="preset" data-val="5000" aria-label="Add 5 thousand rupees">₹5K</button>
-  <button type="button" class="preset" data-val="10000" aria-label="Add 10 thousand rupees">₹10K</button>
-</div>
-
-            <div class="row">
-                <button class="btn" id="addExpense">Add Expense</button>
-                <button class="btn ghost" id="undo">Undo</button>
-            </div>
-
-            <div id="list" class="list card">
-  <div id="emptyState" class="empty-state">No expenses yet — add one to get started.</div>
-</div>
-
+        <div class="mp-dual-row" data-key="currentAge">
+          <label>Current Age</label>
+          <input type="range" class="mp-range" min="16" max="80" step="1" />
+          <button class="mp-pill"></button>
         </div>
 
-        <div class="card section totals">
-            <div>
-                <div class="muted">Total Income</div>
-                <div class="big" id="showIncome">₹0</div>
-            </div>
-
-            <div>
-                <div class="muted">Total Expenses</div>
-                <div class="big" id="showExpenses">₹0</div>
-            </div>
-
-            <div>
-                <div class="muted">Savings</div>
-                <div class="big" id="showSavings">₹0</div>
-            </div>
-        </div>
-    </div>
-
-    <aside class="rightcol">
-
-        <div class="card">
-            <div class="muted">Financial Health Score</div>
-
-            <div class="score">
-                <div class="big" id="scoreVal">0</div>
-
-                <div class="score-meter">
-                    <div class="meter"><div id="meterFill"></div></div>
-                    <div class="muted score-label" id="scoreMsg">—</div>
-                </div>
-            </div>
+        <div class="mp-dual-row" data-key="retirementAge">
+          <label>Retirement Age</label>
+          <input type="range" class="mp-range" min="18" max="80" step="1" />
+          <button class="mp-pill"></button>
         </div>
 
-        <div class="card hint">
-            <strong>Recommendations</strong>
-            <ul id="recoList"></ul>
+        <div class="mp-dual-row" data-key="lifeExpectancy">
+          <label>Life Expectancy</label>
+          <input type="range" class="mp-range" min="60" max="120" step="1" />
+          <button class="mp-pill"></button>
         </div>
-    </aside>
 
-</div>
+        <div class="mp-dual-row" data-key="inflation">
+          <label>Inflation (%)</label>
+          <input type="range" class="mp-range" min="0" max="20" step="0.1" />
+          <button class="mp-pill"></button>
+        </div>
 
-<script src="app.js"></script>
+      </div>
+
+      <div class="mp-fire-results">
+
+        <div class="mp-fire-main">
+          <div id="mp-fire-number" class="mp-fire-number">₹0</div>
+
+          <div class="mp-fire-age-summary">
+            <div id="mp-current-age" class="age-item">Age: —</div>
+            <div id="mp-years-to-retire" class="age-item">Years to go: —</div>
+            <div id="mp-retire-age" class="age-item">Retirement Age: —</div>
+          </div>
+        </div>
+
+        <div class="mp-fire-snapshot">
+          <p class="muted small">Annual expenses today</p>
+          <div id="mp-annual-expenses" class="big">₹0</div>
+
+          <p class="muted small">Expenses at retirement</p>
+          <div id="mp-exp-at-retire" class="big">₹0</div>
+
+          <p class="muted small">Lean FIRE (25x)</p>
+          <div id="mp-lean-fire" class="big">₹0</div>
+
+          <p class="muted small">Fat FIRE (30x)</p>
+          <div id="mp-fat-fire" class="big">₹0</div>
+
+          <button id="mp-reset-fire" class="btn small ghost reset-btn">Reset FIRE</button>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+  </div> 
+
+  <script src="app.js"></script>
 </body>
 </html>
